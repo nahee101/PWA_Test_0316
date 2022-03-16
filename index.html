@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>화면구현</title>
+
+    <!--제이쿼리 라이브러리-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!--넌센스 정보-->
+    <div>
+        <h1>넌센스 퀴즈 맞추기</h1>
+
+        <p>
+            3개의 문제 <br>
+            중복된 문제가 나올 수 있습니다
+        </p>
+    </div>
+
+    <h3 id = "start"><a href="#">시작</a></h3>
+    <h3 id = "quiz"></h3>
+
+    <form id = "input_form">
+        <input type="text" id = "answer_input" style = "display: none;">
+    </form>
+
+    <!--점수-->
+    <p id = score></p>
+
+    <!--걸린 시간-->
+    <p id = "startGame"></p>
+    <p id = "endGame"></p>
+    <p id = "operatingGame"></p>
+
+    <script>
+        //사용 변수
+        let score = 0;
+        let count = 0;
+        let randomNum = 0;
+        //출력될 문제
+        const quizArray = [
+            { quiz: "왕이 넘어지면?", answer: "킹콩"},
+            { quiz: "우유가 넘어지면?", answer: "아야"},
+            { quiz: "비가 한 시간 동안 내리는 것은?", answer: "추적60분"},
+            { quiz: "왕이 갈팡질팡하면?", answer: "우왕좌왕"},
+            { quiz: "꽃집 주인이 싫어하는 도시는?", answer: "시드니"}
+        ];
+
+        $("#answer_input").hide()
+
+        $("#start").on("click", function(event) {
+            event.preventDefault();
+
+            randomQuiz();
+            $("score").text("");
+            $("#answer_input").hide().slideDown().focus();
+            $("#startGame").text(`게임 시작 시간은: ${Date()}`);
+        });
+
+        $("#input_form").on("submit", function(event) {
+            event.preventDefault();
+
+            count++;
+
+            if( $("#answer_input").val() == quizArray[randomNum].answer) {
+            score++;
+            randomQuiz();
+            };
+
+            if (count >= 3) {
+                $("#score").text(`3개의 문제 중 ${score}개 맞췄습니다.`);
+                $("#endGame").text(`게임 종료 시각은: ${Date()}`);
+                count = 0;
+                score = 0;
+                $("#quiz").text("");
+                $("#answer_input").hide();
+                
+            };
+
+            $("#answer_input").val("");
+        });
+
+        function randomQuiz() {
+            randomNum = Math.floor( Math.random()*quizArray.length );
+            $("#quiz").text(quizArray[randomNum].quiz);
+        }
+
+    </script>
+    
+</body>
+</html>
